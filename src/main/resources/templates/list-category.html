@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Category Directory</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <h3>Catalogue Directory</h3>
+  <hr>
+
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+    <tr>
+      <th>Category Name</th>
+      <th>Books</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="category : ${catalogue.categories}">
+      <td th:text="${category.categoryName}" />
+      <td>
+        <select class="form-control" th:attr="onchange=|changeBook(event, '${category.id}')|">
+          <option valu  e="0" selected disabled>Select Book</option>
+          <option th:each="iterBook : ${category.books}" th:value="${iterBook.id}"
+                  th:text="${iterBook.bookName}" th:if="${iterBook.bookStatus == true}"></option>
+          </option>
+        </select>
+
+      </td>
+
+      <td>
+        <a th:id="'order-btn' + '-' + ${category.id}" class="btn btn-info btn-sm">
+          Order
+        </a>
+      </td>
+
+    </tr>
+    </tbody>
+  </table>
+  <a th:href="@{/books/list}"
+     class="btn btn-primary btn-sm mb-3">
+  Advanced Operations
+  </a>
+
+</div>
+
+<script>
+  function changeBook(e, categoryId) {
+    selectedBookId =  $(e.target).find("option:selected").val()
+
+    $("#order-btn-" + categoryId).prop("href", "/books/order?id=" + selectedBookId)
+  }
+</script>
+
+
+</body>
+</html>
